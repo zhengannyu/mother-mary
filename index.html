@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#000000" />
+    <title>Mater Dei — Mother Mary</title>
+    <meta name="description" content="A meditation in red — the flowing veil of Mother Mary." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <canvas id="silk" aria-hidden="true"></canvas>
+
+    <!-- Two-column masthead: spinning CD on the left, title on the right -->
+    <main class="stage">
+      <!-- Realistic spinning CD -->
+      <div class="cd-stage" aria-hidden="true">
+        <div class="cd">
+          <div class="cd__spin">
+            <!-- Swap this src with your own CD cover artwork -->
+            <img class="cd__art" src="/cd-cover.png" alt="" />
+            <div class="cd__grooves"></div>
+          </div>
+          <div class="cd__sheen"></div>
+          <div class="cd__clear"></div>
+          <div class="cd__hub"></div>
+          <div class="cd__hole"></div>
+        </div>
+      </div>
+
+      <!-- Title block -->
+      <div class="masthead">
+        <img class="masthead__logo" src="/mother-mary-logo.svg" alt="Mother Mary" />
+        <p class="masthead__tagline">This is a love story</p>
+        <p class="masthead__date">14 June</p>
+      </div>
+    </main>
+
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
