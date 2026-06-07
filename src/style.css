@@ -92,7 +92,7 @@ body {
   width: 40%;
   flex: 0 0 auto;
   pointer-events: none;
-  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.6));
+  filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.4));
 }
 
 .cd {
@@ -101,10 +101,8 @@ body {
   aspect-ratio: 1;
   border-radius: 50%;
   isolation: isolate;
-  /* faint dark rim so the disc edge separates from the black void */
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.05),
-    inset 0 0 2px rgba(0, 0, 0, 0.6);
+  /* faint rim so the disc edge separates from the black void */
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .cd > * {
@@ -138,76 +136,44 @@ body {
   display: block;
 }
 
-/* Concentric data tracks — fine pressed rings catching the light */
+/* A couple of quiet concentric rings — just a hint of a disc, no
+   photoreal data tracks. */
 .cd__grooves {
   background:
     repeating-radial-gradient(
       circle at 50% 50%,
-      rgba(255, 255, 255, 0.07) 0px,
-      rgba(255, 255, 255, 0.07) 1px,
-      rgba(0, 0, 0, 0.16) 2px,
-      rgba(0, 0, 0, 0.16) 3px
+      transparent 0px,
+      transparent 7px,
+      rgba(255, 255, 255, 0.05) 8px,
+      transparent 9px
     );
-  mix-blend-mode: overlay;
-  opacity: 0.55;
+  opacity: 0.5;
 }
 
-/* Fixed specular sheen — a broad glossy reflection anchored to the
-   "light", so the disc visibly spins underneath a still highlight. */
+/* No glossy specular sheen in the flat look. */
 .cd__sheen {
-  background:
-    radial-gradient(
-      75% 60% at 32% 26%,
-      rgba(255, 255, 255, 0.55) 0%,
-      rgba(255, 255, 255, 0.12) 26%,
-      transparent 52%
-    ),
-    radial-gradient(
-      60% 50% at 72% 82%,
-      rgba(255, 255, 255, 0.18) 0%,
-      transparent 48%
-    );
-  mix-blend-mode: screen;
-  pointer-events: none;
+  display: none;
 }
 
-/* Clear plastic ring around the hub */
+/* Clear plastic ring around the hub — flat tint, no 3D shading */
 .cd__clear {
   inset: 34%;
-  background:
-    radial-gradient(
-      circle at 38% 32%,
-      rgba(220, 235, 255, 0.28),
-      rgba(120, 140, 170, 0.1) 55%,
-      rgba(0, 0, 0, 0.35) 100%
-    );
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
-    inset 0 2px 8px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-/* Metallic mounting hub */
+/* Mounting hub — flat */
 .cd__hub {
   inset: 40%;
-  background:
-    radial-gradient(
-      circle at 38% 32%,
-      rgba(245, 248, 255, 0.5),
-      rgba(150, 160, 175, 0.25) 50%,
-      rgba(20, 22, 28, 0.7) 100%
-    );
-  box-shadow:
-    inset 0 0 0 1.5px rgba(255, 255, 255, 0.18),
-    inset 0 0 10px rgba(0, 0, 0, 0.55);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
 }
 
 /* Centre hole — the black void shows through */
 .cd__hole {
   inset: 46.5%;
   background: var(--bg);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.14),
-    inset 0 2px 6px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
 @keyframes cd-spin {
