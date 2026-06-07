@@ -280,6 +280,27 @@ body {
   color: var(--ink);
 }
 
+/* ──────────────────────────────────────────────────────────────
+   Legal footer — quiet copyright notice pinned to the bottom
+   ────────────────────────────────────────────────────────────── */
+.legal {
+  position: fixed;
+  left: 50%;
+  bottom: 1.6rem;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: min(80%, 1100px);
+  text-align: center;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 300;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  color: var(--ink-dim);
+  pointer-events: none;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .grain {
     animation: none;
