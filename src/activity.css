@@ -145,14 +145,14 @@ body {
     animation-timing-function: cubic-bezier(0.7, 0, 0.2, 1);
   }
   48.33% {
-    transform: rotate(375deg);
+    transform: rotate(1095deg);
     animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
   }
   83.33% {
-    transform: rotate(360deg);
+    transform: rotate(1080deg);
   }
   100% {
-    transform: rotate(360deg);
+    transform: rotate(1080deg);
   }
 }
 

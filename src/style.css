@@ -187,18 +187,18 @@ body {
     transform: rotate(-15deg);
     animation-timing-function: cubic-bezier(0.7, 0, 0.2, 1);
   }
-  /* 2. snap fast to the right, +390° (seamless loop: net 360°) */
+  /* 2. snap fast to the right, +1110° (three turns + 15° overshoot) */
   48.33% {
-    transform: rotate(375deg);
+    transform: rotate(1095deg);
     animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
   }
-  /* 3. slowly settle left, -15° → lands on 360° = 0° */
+  /* 3. slowly settle back → lands on 1080° = three full turns */
   83.33% {
-    transform: rotate(360deg);
+    transform: rotate(1080deg);
   }
   /* ── Hold still for the last 4s (83.33% – 100%) ── */
   100% {
-    transform: rotate(360deg);
+    transform: rotate(1080deg);
   }
 }
 
