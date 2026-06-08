@@ -247,15 +247,11 @@ body {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   Legal footer — quiet copyright notice pinned to the bottom
+   Legal footer — quiet copyright notice in normal flow
    ────────────────────────────────────────────────────────────── */
 .legal {
-  position: fixed;
-  left: 50%;
-  bottom: 1.6rem;
-  transform: translateX(-50%);
-  z-index: 3;
   width: min(80%, 1100px);
+  margin: 0 auto;
   text-align: center;
   font-family: "Cormorant Garamond", Georgia, serif;
   font-weight: 300;

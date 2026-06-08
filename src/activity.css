@@ -37,7 +37,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 0 28px;
-  transition: opacity 0.9s ease;
+  transition: opacity 0.55s ease;
   will-change: opacity;
 }
 
@@ -61,7 +61,7 @@ body {
 
 /* Each phrase fades up in, holds, then fades up out */
 .intro__line.is-in {
-  animation: intro-line 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: intro-line 0.78s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 @keyframes intro-line {
@@ -78,12 +78,13 @@ body {
 }
 
 .intro-played .activity > * {
-  animation: page-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: page-rise 0.01s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-.intro-played .title { animation-delay: 0.05s; }
-.intro-played .actions { animation-delay: 0.18s; }
-.intro-played .scroll-btn { animation-delay: 0.3s; }
+.intro-played .title { animation-delay: 0.04s; }
+.intro-played .actions { animation-delay: 0.12s; }
+.intro-played .scroll-btn { animation-delay: 0.2s; }
+.intro-played .legal { animation-delay: 0.28s; }
 
 @keyframes page-rise {
   to { opacity: 1; transform: translateY(0); }
@@ -108,7 +109,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 64px;
+  padding-bottom: 28px;
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -159,7 +160,7 @@ body {
    MOTHER MARY — tall condensed display serif (Imbue)
    ────────────────────────────────────────────────────────────── */
 .title {
-  margin-top: 4px;
+  margin-top: 20px;
   font-family: "Imbue", Georgia, serif;
   font-optical-sizing: auto;
   font-weight: 400;
@@ -224,9 +225,17 @@ body {
    Rotating "scroll down" button — circular text orbiting a centred
    arrow, spinning slowly. Pushed toward the bottom of the frame.
    ────────────────────────────────────────────────────────────── */
+.scroll-btn__text {
+  margin-top: 20px;
+  font-family: "Noto Sans TC", system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
 .scroll-btn {
   position: relative;
-  margin-top: auto; /* pushes it down to the foot of the flex column */
+  margin-top: 20px;
   margin-bottom: 8px;
   width: 96px;
   height: 96px;
@@ -291,13 +300,11 @@ body {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   Quiet legal notice, pinned to the bottom of the frame
+   Quiet legal notice — sits at the foot of the column, in normal
+   flow so it scrolls with the page and never overlaps the content.
    ────────────────────────────────────────────────────────────── */
 .legal {
-  position: fixed;
-  left: 50%;
-  bottom: 14px;
-  transform: translateX(-50%);
+  margin-top: 24px;
   width: min(86%, 400px);
   text-align: center;
   font-family: "Noto Sans TC", system-ui, sans-serif;
