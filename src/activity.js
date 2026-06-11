@@ -3,7 +3,7 @@ import "./activity.css";
 // ── Intro sequence ──────────────────────────────────────────────
 // Four phrases play one after another, then the curtain lifts and
 // the page rises in. Edit INTRO_LINES to change the copy.
-const INTRO_LINES = ["This is not a ghost story", "This is not a love story", "This is a prayer", "A song", "A Dress", "A Communion"];
+const INTRO_LINES = ["This is not a ghost story", "This is not a love story"];
 
 const intro = document.querySelector(".intro");
 const introLine = document.querySelector(".intro__line");
