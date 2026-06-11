@@ -161,20 +161,13 @@ body {
    ────────────────────────────────────────────────────────────── */
 .title {
   margin-top: 20px;
-  font-family: "Imbue", Georgia, serif;
-  font-optical-sizing: auto;
-  font-weight: 400;
-  font-size: 150px;
-  line-height: 0.84;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
   text-align: center;
-  display: flex;
-  flex-direction: column;
 }
 
-.title span {
-  display: block;
+.title img {
+  width: 380px;
+  height: auto;
+  filter: brightness(0) invert(1);
 }
 
 /* ──────────────────────────────────────────────────────────────
