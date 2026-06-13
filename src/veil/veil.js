@@ -14,20 +14,27 @@ varying vec3 vNormal;
 varying vec3 vWorldPos;
 varying vec2 vUv;
 
-// A travelling sine wave: adds height and accumulates the analytic gradient.
-void wave(vec2 p, vec2 dir, float k, float amp, float speed, float phase,
-          inout float z, inout vec2 grad) {
+// Gerstner-style travelling wave: vertices ORBIT as the wave passes, so each
+// crest gathers cloth and rolls forward — the curling, tumbling motion of
+// loose gauze, not the up-down bob of a water surface. q is crest steepness;
+// the sum of q*k*amp across waves must stay below ~1 or crests self-intersect.
+void wave(vec2 p, vec2 dir, float k, float amp, float q, float speed,
+          float phase, inout vec3 dp, inout vec3 n) {
   float a = dot(p, dir) * k + uTime * speed + phase;
-  z += amp * sin(a);
-  grad += amp * k * cos(a) * dir;
+  float s = sin(a);
+  float c = cos(a);
+  dp.xy += dir * (q * amp * c);
+  dp.z  += amp * s;
+  n.xy  -= dir * (k * amp * c);
+  n.z   -= q * k * amp * s;
 }
 
 void main() {
   vUv = uv;
   vec2 p = position.xy;
 
-  float z = 0.0;
-  vec2 g = vec2(0.0);
+  vec3 dp = vec3(0.0);
+  vec3 nrm = vec3(0.0, 0.0, 1.0);
 
   // Gathered dome rest shape — the same soft blob silhouette the old sim
   // rested toward (half extents of the gathered sheet: 1.48 × 1.11).
@@ -35,30 +42,28 @@ void main() {
   float ny = p.y / 1.11;
   float rr = min(nx * nx + ny * ny, 1.0);
   float omr = 1.0 - rr;
-  z += 0.5 * omr * omr;
-  g -= omr * vec2(2.0 * nx / 1.48, 2.0 * ny / 1.11);
+  dp.z += 0.5 * omr * omr;
+  nrm.xy += omr * vec2(2.0 * nx / 1.48, 2.0 * ny / 1.11);
 
-  // Layered slow waves with long diagonal crests — dreamy, silk-like flow.
-  // The rim waves a touch more than the centre (loose edges), like the old
-  // curl force; its gradient term is negligible and intentionally ignored.
+  // Layered rolling waves with long diagonal crests. The rim waves more than
+  // the centre (loose edges), like the curl of a free hem.
   float rim = 0.6 + 0.55 * rr;
-  wave(p, normalize(vec2( 0.80,  0.60)), 1.6, 0.27  * rim,  0.42, 0.0, z, g);
-  wave(p, normalize(vec2(-0.50,  0.85)), 2.3, 0.18  * rim, -0.31, 1.7, z, g);
-  wave(p, normalize(vec2( 0.95, -0.30)), 3.1, 0.11  * rim,  0.55, 4.2, z, g);
-  wave(p, normalize(vec2(-0.85, -0.55)), 1.1, 0.22  * rim,  0.24, 2.6, z, g);
-  wave(p, normalize(vec2( 0.20,  0.98)), 4.1, 0.06  * rim, -0.66, 5.1, z, g);
+  wave(p, normalize(vec2( 0.80,  0.60)), 1.6, 0.27 * rim, 0.45,  0.65, 0.0, dp, nrm);
+  wave(p, normalize(vec2(-0.50,  0.85)), 2.3, 0.18 * rim, 0.45, -0.50, 1.7, dp, nrm);
+  wave(p, normalize(vec2( 0.95, -0.30)), 3.1, 0.11 * rim, 0.45,  0.85, 4.2, dp, nrm);
+  wave(p, normalize(vec2(-0.85, -0.55)), 1.1, 0.22 * rim, 0.45,  0.40, 2.6, dp, nrm);
+  wave(p, normalize(vec2( 0.20,  0.98)), 4.1, 0.06 * rim, 0.40, -1.00, 5.1, dp, nrm);
   // one long slow swell so the whole mass breathes
-  wave(p, normalize(vec2( 0.60, -0.80)), 0.55, 0.20, 0.13, 3.3, z, g);
+  wave(p, normalize(vec2( 0.60, -0.80)), 0.55, 0.20, 0.30, 0.20, 3.3, dp, nrm);
 
-  // Fine creases — short wavelengths (still ~15+ grid cells, far above any
-  // aliasing) with small amplitude but steep slopes: these paint the tight
-  // crease shading that makes the surface read as gauze, not blurred jelly.
-  wave(p, normalize(vec2( 0.30,  0.95)), 6.5, 0.035 * rim,  0.50, 0.9, z, g);
-  wave(p, normalize(vec2(-0.90,  0.40)), 9.0, 0.022 * rim, -0.38, 2.2, z, g);
-  wave(p, normalize(vec2( 0.75, -0.66)), 12.5, 0.013 * rim,  0.61, 5.8, z, g);
+  // Fine flutter — short wavelengths (still ~15+ grid cells, far above any
+  // aliasing), small amplitude, FAST: the quick shiver of a thin hem in air.
+  wave(p, normalize(vec2( 0.30,  0.95)),  6.5, 0.035 * rim, 0.0,  1.30, 0.9, dp, nrm);
+  wave(p, normalize(vec2(-0.90,  0.40)),  9.0, 0.022 * rim, 0.0, -1.05, 2.2, dp, nrm);
+  wave(p, normalize(vec2( 0.75, -0.66)), 12.5, 0.013 * rim, 0.0,  1.60, 5.8, dp, nrm);
 
-  vec3 pos3 = vec3(p, z);
-  vec3 n = normalize(vec3(-g, 1.0));
+  vec3 pos3 = vec3(p + dp.xy, dp.z);
+  vec3 n = normalize(nrm);
 
   vNormal = normalize(normalMatrix * n);
   vec4 wp = modelMatrix * vec4(pos3, 1.0);
