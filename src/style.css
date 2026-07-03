@@ -68,18 +68,20 @@ body {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   Two-column stage — CD on the left, title block on the right
+   Poster stage — full-bleed positioning context (designed at 1920×1080)
+   CD bleeds off the top-left, wordmark fills the lower half, meta and
+   captions sit in the corners.
    ────────────────────────────────────────────────────────────── */
 .stage {
-  width: 90%;
-  margin: 0 auto;
+  /* Designed at a fixed 1920×1080 canvas; main.js sets --stage-scale so
+     the whole poster scales proportionally to fit any window. */
   position: fixed;
-  inset: 0;
+  left: 50%;
+  top: 50%;
+  width: 1920px;
+  height: 1080px;
+  transform: translate(-50%, -50%) scale(var(--stage-scale, 1));
   z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5%;
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -89,8 +91,11 @@ body {
    and a clear hub ring + centre hole finish the silhouette.
    ────────────────────────────────────────────────────────────── */
 .cd-stage {
-  width: 40%;
-  flex: 0 0 auto;
+  position: absolute;
+  width: 964px;
+  height: 964px;
+  left: 80px;
+  top: -214px;
   pointer-events: none;
   filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.4));
 }
@@ -155,25 +160,17 @@ body {
   display: none;
 }
 
-/* Clear plastic ring around the hub — flat tint, no 3D shading */
-.cd__clear {
-  inset: 34%;
-  background: rgba(255, 255, 255, 0.06);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-}
-
-/* Mounting hub — flat */
+/* Clear plastic ring + hub — hidden in the flat poster look */
+.cd__clear,
 .cd__hub {
-  inset: 40%;
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  display: none;
 }
 
-/* Centre hole — the black void shows through */
+/* Centre hole — solid white dot, per the poster mock */
 .cd__hole {
   inset: 46.5%;
-  background: var(--bg);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  background: #fff;
+  box-shadow: none;
 }
 
 @keyframes cd-spin {
@@ -203,60 +200,98 @@ body {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   Title block — right column
-   "MOTHER MARY" logo with tagline + release date beneath it.
+   "MOTHER MARY" wordmark — large, spanning the lower half
    ────────────────────────────────────────────────────────────── */
-.masthead {
-  width: 60%;
-  flex: 0 1 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.masthead__logo {
-  width: 100%;
-  height: auto;
+.title {
+  position: absolute;
+  left: 50%;
+  bottom: 120px;
+  transform: translateX(-50%);
+  /* Stretched wider than the logo's natural aspect to run nearly
+     edge-to-edge, matching the poster mock. */
+  width: 1706px;
+  height: 532px;
   display: block;
   filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.5));
 }
 
-.masthead__tagline {
-  margin-top: 1.4rem;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-style: italic;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.42em;
-  /* trailing indent offsets the letter-spacing so the line stays centred */
-  text-indent: 0.42em;
-  font-size: 0.95rem;
-  color: var(--ink-dim);
+/* ──────────────────────────────────────────────────────────────
+   Meta line (date + event, top-right) and corner captions
+   share type; position differs.
+   ────────────────────────────────────────────────────────────── */
+.meta,
+.caption {
+  position: absolute;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 38px;
+  letter-spacing: 0.01em;
+  color: #fff;
+  white-space: nowrap;
 }
 
-.masthead__date {
-  margin-top: 0.55rem;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: 0.22em;
-  text-indent: 0.22em;
-  font-size: 1.6rem;
-  color: var(--ink);
+.meta {
+  top: 360px;
+  right: 110px;
+  display: flex;
+  gap: 70px;
+}
+
+.caption {
+  bottom: 45px;
+  margin: 0;
+}
+
+.caption--left {
+  left: 115px;
+}
+
+.caption--right {
+  right: 155px;
 }
 
 /* ──────────────────────────────────────────────────────────────
-   Legal footer — quiet copyright notice in normal flow
+   Hand-drawn boiling frame — a wobbly stroke hugging the viewport
+   edge. The wobble comes from an SVG turbulence displacement filter;
+   main.js re-seeds it a few times per second for the stop-motion
+   "boiling" jitter (à la ci.funtech.inc).
+   ────────────────────────────────────────────────────────────── */
+.frame {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.frame__rect {
+  x: 14px;
+  y: 14px;
+  width: calc(100% - 28px);
+  height: calc(100% - 28px);
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2px;
+  opacity: 0.85;
+  filter: url(#frame-squiggle);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Legal footer — quiet copyright notice, centred at the very bottom
    ────────────────────────────────────────────────────────────── */
 .legal {
-  width: min(80%, 1100px);
-  margin: 0 auto;
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: min(60%, 1000px);
   text-align: center;
   font-family: "Cormorant Garamond", Georgia, serif;
   font-weight: 300;
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
+  font-size: 13px;
+  letter-spacing: 0.06em;
   line-height: 1.5;
   color: var(--ink-dim);
   pointer-events: none;
