@@ -37,15 +37,14 @@
 
       <!-- Date + event, top-right -->
       <div class="meta">
-        <span class="meta__date">6/14 2026</span>
-        <span class="meta__event">Sam New house Party</span>
+        <span class="meta__date">7/18 2026</span>
       </div>
 
       <!-- Big "MOTHER MARY" wordmark -->
       <img class="title" src="/mother-mary-logo.svg" alt="Mother Mary" />
 
       <!-- Bottom captions -->
-      <p class="caption caption--left">I'm Sorry!</p>
+      <p class="caption caption--left"></p>
       <p class="caption caption--right">Because She Above All Others Know You</p>
 
       <footer class="legal">本網站僅作為非營利電影包場活動資訊使用，相關電影名稱、標誌及宣傳素材之權利均屬原權利人所有。</footer>
@@ -53,17 +52,6 @@
 
     <div class="vignette" aria-hidden="true"></div>
     <div class="grain" aria-hidden="true"></div>
-
-    <!-- Hand-drawn "boiling" frame hugging the viewport edges -->
-    <svg class="frame" aria-hidden="true">
-      <defs>
-        <filter id="frame-squiggle" x="-20%" y="-20%" width="140%" height="140%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="1" result="noise" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="7" />
-        </filter>
-      </defs>
-      <rect class="frame__rect" />
-    </svg>
 
     <script type="module" src="/src/main.js"></script>
   </body>

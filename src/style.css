@@ -249,33 +249,6 @@ body {
   right: 155px;
 }
 
-/* ──────────────────────────────────────────────────────────────
-   Hand-drawn boiling frame — a wobbly stroke hugging the viewport
-   edge. The wobble comes from an SVG turbulence displacement filter;
-   main.js re-seeds it a few times per second for the stop-motion
-   "boiling" jitter (à la ci.funtech.inc).
-   ────────────────────────────────────────────────────────────── */
-.frame {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 4;
-  pointer-events: none;
-  overflow: visible;
-}
-
-.frame__rect {
-  x: 14px;
-  y: 14px;
-  width: calc(100% - 28px);
-  height: calc(100% - 28px);
-  fill: none;
-  stroke: var(--ink);
-  stroke-width: 2px;
-  opacity: 0.85;
-  filter: url(#frame-squiggle);
-}
 
 /* ──────────────────────────────────────────────────────────────
    Legal footer — quiet copyright notice, centred at the very bottom
