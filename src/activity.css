@@ -22,6 +22,34 @@ body {
   min-height: 100svh;
   display: flex;
   justify-content: center;
+  position: relative;
+  isolation: isolate;
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+body::before {
+  z-index: -2;
+  background:
+    #121212
+    center / cover no-repeat
+    url("/key-visual.avif");
+  transform: rotate(180deg) scale(1.08);
+  transform-origin: center;
+  opacity: 0.8;
+}
+
+body::after {
+  z-index: 999;
+  background: center / 240px 240px repeat url("/noisy.png");
+  opacity: 0.16;
+  mix-blend-mode: screen;
 }
 
 /* ──────────────────────────────────────────────────────────────
