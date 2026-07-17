@@ -205,12 +205,12 @@ body {
 .title {
   position: absolute;
   left: 50%;
-  bottom: 120px;
+  bottom: 80px;
   transform: translateX(-50%);
   /* Stretched wider than the logo's natural aspect to run nearly
      edge-to-edge, matching the poster mock. */
-  width: 1706px;
-  height: 532px;
+  width: 92%;
+  height: auto;
   display: block;
   filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.5));
 }
@@ -219,34 +219,33 @@ body {
    Meta line (date + event, top-right) and corner captions
    share type; position differs.
    ────────────────────────────────────────────────────────────── */
-.meta,
+.caption-flex {
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 80%;
+height: auto;
+margin: 0 auto;
+padding-top: 120px;
+position: absolute;
+left: 50%;
+transform: translateX(-52%);
+z-index: 3;
+bottom: 40px;
+gap: 1%;
+}
+.line {
+  width: 100%;
+  height: 1px;
+  background: #fff;
+  margin: 0 10px;
+}
 .caption {
-  position: absolute;
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 38px;
+  font-size: 24px;
   letter-spacing: 0.01em;
   color: #fff;
   white-space: nowrap;
-}
-
-.meta {
-  top: 360px;
-  right: 110px;
-  display: flex;
-  gap: 70px;
-}
-
-.caption {
-  bottom: 45px;
-  margin: 0;
-}
-
-.caption--left {
-  left: 115px;
-}
-
-.caption--right {
-  right: 155px;
 }
 
 
