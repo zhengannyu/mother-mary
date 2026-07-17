@@ -72,9 +72,13 @@ void main() {
 }
 `
 
+// Grid resolution — kept just fine enough for soft, dreamy folds. Dropping
+// from the previous 84×56 to 72×48 cuts the per-frame physics cost by ~30%
+// (fewer particles + fewer distance constraints to relax) with no visible
+// loss of fold detail, since the silk motion is slow and the shading is soft.
 const SETTINGS = {
-  desktop: { cols: 84, rows: 56 },
-  mobile: { cols: 46, rows: 32 },
+  desktop: { cols: 72, rows: 48 },
+  mobile: { cols: 40, rows: 28 },
 }
 
 // Physics tuning — big, slow silk folds on a black void.
@@ -90,7 +94,7 @@ const SIM = {
   floatZ: 0.0, // depth the mass hovers at
   sway: 0.3, // the centre target roams a little, so it drifts as it tumbles
   stiffness: 0.85, // floppy → thin fabric folds into deep, soft creases
-  iterations: 6, // extra relax passes keep the floppy cloth from over-stretching
+  iterations: 5, // relax passes — 5 is enough to hold shape without over-stretching
   wrinkle: 0.07, // very faint crease — less faceting for the normals to comb
   curl: 0.3, // edges flip and curl — kept low so the rim doesn't comb into spikes
   // Containment: a SOFT disc around the cloth's own centre. The mass is eased
@@ -117,7 +121,10 @@ export function initVeil(canvas) {
   try {
     renderer = new THREE.WebGLRenderer({
       canvas,
-      antialias: true,
+      // MSAA is redundant here — the fragment shader already dissolves every
+      // edge with a soft alpha falloff, so hardware antialiasing just burns
+      // fill-rate on a full-screen transparent mesh for no visible gain.
+      antialias: false,
       alpha: true,
       powerPreference: 'high-performance',
     })
@@ -128,7 +135,10 @@ export function initVeil(canvas) {
   }
 
   renderer.setClearColor(0x000000, 0)
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
+  // Cap at 1.5x rather than 2x — on retina/4K screens the jump from 1.5→2x
+  // roughly doubles the pixels this full-screen transparent shader has to
+  // blend, which is a much bigger cost than the extra sharpness is worth.
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5))
 
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100)
@@ -139,8 +149,8 @@ export function initVeil(canvas) {
 
   // Sheet sized to a contained mass that floats in the middle of the view —
   // not a full-bleed drape.
-  const sheetW = 3.6
-  const sheetH = 2.7
+  const sheetW = 5.2
+  const sheetH = 5.15
   const sim = new ClothSim({ cols, rows, width: sheetW, height: sheetH })
 
   // --- geometry: positions stream from the sim, indices/uv are static ---
@@ -217,9 +227,21 @@ export function initVeil(canvas) {
     material.uniforms.uBaseAlpha.value = 0
   }
 
+  // The cloth sim + normal rebuild are the heaviest work per frame (a Verlet
+  // relaxation over thousands of particles/constraints, then a full mesh
+  // normal recompute). The silk's motion is slow and dreamy by design, so
+  // stepping physics at ~30Hz instead of 60Hz is visually seamless but
+  // roughly halves the CPU cost — the render loop itself still runs every
+  // rAF tick, so anything composited on top (e.g. the CD's CSS spin) stays
+  // perfectly smooth regardless of the sim's step rate.
+  let frameParity = 0
+
   function frame() {
-    if (!reduceMotion) {
-      elapsed += 1 / 60
+    const stepPhysics = reduceMotion === false && frameParity === 0
+    frameParity ^= 1
+
+    if (stepPhysics || reduceMotion) {
+      if (!reduceMotion) elapsed += 1 / 30
       const t = Math.min(1, elapsed / REVEAL.duration)
       const e = easeOutCubic(t)
       mesh.scale.set(
@@ -229,13 +251,14 @@ export function initVeil(canvas) {
       )
       material.uniforms.uBaseAlpha.value = baseAlpha * e
 
-      sim.update(1 / 60, SIM)
-    }
+      if (!reduceMotion) sim.update(1 / 30, SIM)
 
-    // Stream sim positions into the geometry, then rebuild normals.
-    posAttr.array.set(sim.pos)
-    posAttr.needsUpdate = true
-    geometry.computeVertexNormals()
+      // Stream sim positions into the geometry, then rebuild normals — only
+      // needed on frames where the positions actually changed.
+      posAttr.array.set(sim.pos)
+      posAttr.needsUpdate = true
+      geometry.computeVertexNormals()
+    }
 
     renderer.render(scene, camera)
     raf = requestAnimationFrame(frame)

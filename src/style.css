@@ -92,10 +92,10 @@ body {
    ────────────────────────────────────────────────────────────── */
 .cd-stage {
   position: absolute;
-  width: 964px;
-  height: 964px;
+  width: 840px;
+  height: 840px;
   left: 80px;
-  top: -214px;
+  top: -264px;
   pointer-events: none;
   filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.4));
 }
